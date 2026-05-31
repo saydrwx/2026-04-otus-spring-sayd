@@ -49,8 +49,8 @@ public class TestServiceImpl implements TestService {
 
   private int getInputAnswer(Question question) {
     int answersCount = question.answers().size();
-    return ioService.readIntForRangeWithPrompt(1, answersCount, "Enter the answer number",
-      "Answer number out of range");
+    return ioService.readIntForRangeWithPromptLocalized(1, answersCount,
+      "TestService.enter.answer.number", "TestService.answer.number.out.of.range");
   }
 
   private boolean isAnswerValid(Question question, int inputAnswer) {
