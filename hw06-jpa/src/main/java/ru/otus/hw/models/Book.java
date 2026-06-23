@@ -19,8 +19,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Data
 @ToString(onlyExplicitlyIncluded = true)
@@ -50,6 +48,5 @@ public class Book {
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"),
     inverseJoinColumns = @JoinColumn(name = "genre_id"))
-  @Fetch(FetchMode.SUBSELECT)
   private List<Genre> genres;
 }
