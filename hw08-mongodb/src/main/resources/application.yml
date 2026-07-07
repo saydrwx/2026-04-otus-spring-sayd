@@ -1,0 +1,32 @@
+spring:
+  main:
+    allow-circular-references: true
+  shell:
+    interactive:
+      enabled: true
+    command:
+      version:
+        enabled: false
+  data:
+    mongodb:
+      database: books-db
+      port: 0
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.14
+
+mongock:
+  runner-type: "InitializingBean"
+  migration-scan-package:
+    - ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    root: ERROR
