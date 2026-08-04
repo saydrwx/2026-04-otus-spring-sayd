@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head th:replace="~{fragments/layout :: head(#{login.page-title})}"></head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+
+<header>
+  <nav class="navbar border-bottom bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/login}">
+        <i class="bi bi-book-half text-primary"></i>
+        <span th:text="#{application.name}">Library</span>
+      </a>
+
+      <div class="btn-group btn-group-sm" role="group" th:attr="aria-label=#{language.selector}">
+        <a class="btn"
+           th:classappend="${#locale.language == 'en'} ? ' btn-primary' : ' btn-outline-secondary'"
+           th:href="@{/login(lang=en)}"
+           lang="en">EN</a>
+        <a class="btn"
+           th:classappend="${#locale.language == 'ru'} ? ' btn-primary' : ' btn-outline-secondary'"
+           th:href="@{/login(lang=ru)}"
+           lang="ru">RU</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container flex-grow-1 py-5">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-7 col-lg-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="h3 mb-4" th:text="#{login.heading}">Sign in</h1>
+
+          <div class="alert alert-success" role="alert"
+               th:if="${successMessageCode}"
+               th:text="${#messages.msg(successMessageCode)}">
+            Registration completed successfully.
+          </div>
+
+          <div class="alert alert-danger" role="alert" th:if="${param.error}">
+            <i class="bi bi-exclamation-circle me-1"></i>
+            <span th:text="#{login.error}">Invalid user name or password.</span>
+          </div>
+
+          <div class="alert alert-success" role="alert" th:if="${param.logout}">
+            <i class="bi bi-check-circle me-1"></i>
+            <span th:text="#{login.logged-out}">You have been signed out.</span>
+          </div>
+
+          <form method="post" th:action="@{/login}">
+            <div class="mb-3">
+              <label class="form-label" for="username" th:text="#{user.name}">User name</label>
+              <input class="form-control"
+                     id="username"
+                     name="username"
+                     type="text"
+                     maxlength="255"
+                     autocomplete="username"
+                     required
+                     autofocus>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="password" th:text="#{user.password}">Password</label>
+              <input class="form-control"
+                     id="password"
+                     name="password"
+                     type="password"
+                     maxlength="255"
+                     autocomplete="current-password"
+                     required>
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit">
+              <i class="bi bi-box-arrow-in-right me-1"></i>
+              <span th:text="#{login.submit}">Sign in</span>
+            </button>
+          </form>
+
+          <p class="text-center text-secondary mt-4 mb-0">
+            <span th:text="#{login.no-account}">No account?</span>
+            <a th:href="@{/register}" th:text="#{login.register-link}">Register</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
