@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head th:replace="~{fragments/layout :: head(#{register.page-title})}"></head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+
+<header>
+  <nav class="navbar border-bottom bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/login}">
+        <i class="bi bi-book-half text-primary"></i>
+        <span th:text="#{application.name}">Library</span>
+      </a>
+
+      <div class="btn-group btn-group-sm" role="group" th:attr="aria-label=#{language.selector}">
+        <a class="btn"
+           th:classappend="${#locale.language == 'en'} ? ' btn-primary' : ' btn-outline-secondary'"
+           th:href="@{/register(lang=en)}"
+           lang="en">EN</a>
+        <a class="btn"
+           th:classappend="${#locale.language == 'ru'} ? ' btn-primary' : ' btn-outline-secondary'"
+           th:href="@{/register(lang=ru)}"
+           lang="ru">RU</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="container flex-grow-1 py-5">
+  <div class="row justify-content-center">
+    <div class="col-sm-10 col-md-7 col-lg-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="h3 mb-4" th:text="#{register.heading}">Create account</h1>
+
+          <form method="post" th:action="@{/register}" th:object="${userForm}">
+            <div class="mb-3">
+              <label class="form-label" for="name" th:text="#{user.name}">User name</label>
+              <input class="form-control"
+                     th:classappend="${#fields.hasErrors('name')} ? ' is-invalid' : ''"
+                     id="name"
+                     type="text"
+                     th:field="*{name}"
+                     maxlength="255"
+                     autocomplete="username"
+                     required
+                     autofocus>
+              <div class="invalid-feedback" th:errors="*{name}">Invalid user name</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="password" th:text="#{user.password}">Password</label>
+              <input class="form-control"
+                     th:classappend="${#fields.hasErrors('password')} ? ' is-invalid' : ''"
+                     id="password"
+                     name="password"
+                     type="password"
+                     maxlength="255"
+                     autocomplete="new-password"
+                     required>
+              <div class="invalid-feedback" th:errors="*{password}">Invalid password</div>
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit">
+              <i class="bi bi-person-plus me-1"></i>
+              <span th:text="#{register.submit}">Register</span>
+            </button>
+          </form>
+
+          <p class="text-center text-secondary mt-4 mb-0">
+            <span th:text="#{register.have-account}">Already have an account?</span>
+            <a th:href="@{/login}" th:text="#{register.login-link}">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
