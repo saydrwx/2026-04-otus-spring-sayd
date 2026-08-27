@@ -19,6 +19,9 @@ spring:
       hibernate:
         format_sql: true
     show-sql: false
+  data:
+    rest:
+      base-path: /datarest
 
 logging:
   file:
