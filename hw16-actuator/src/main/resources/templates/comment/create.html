@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head th:replace="~{fragments/layout :: head(#{comment.create.page-title})}"></head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+<div th:replace="~{fragments/layout :: header('books')}"></div>
+<main class="container flex-grow-1 py-5">
+  <div class="row justify-content-center"><div class="col-lg-8">
+    <div class="card border-0 shadow-sm"><div class="card-body p-4">
+      <h1 class="h3 mb-2" th:text="#{comment.create.heading}">Create comment</h1>
+      <p class="text-secondary mb-4" th:text="${book.title}">Book title</p>
+      <form method="post" th:action="@{/books/{bookId}/comments(bookId=${book.id})}" th:object="${commentForm}">
+        <div class="mb-4">
+          <label class="form-label" for="text" th:text="#{comment.text}">Comment</label>
+          <textarea class="form-control" th:classappend="${#fields.hasErrors('text')} ? ' is-invalid' : ''"
+                    id="text" rows="6" th:field="*{text}" maxlength="1000" autofocus></textarea>
+          <div class="invalid-feedback" th:errors="*{text}">Invalid comment</div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="submit">
+            <i class="bi bi-check-lg me-1"></i><span th:text="#{action.create}">Create</span>
+          </button>
+          <a class="btn btn-outline-secondary" th:href="@{/books/{id}(id=${book.id})}" th:text="#{action.cancel}">Cancel</a>
+        </div>
+      </form>
+    </div></div>
+  </div></div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
