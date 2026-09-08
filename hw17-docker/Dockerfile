@@ -2,7 +2,9 @@ FROM maven:3.9.11-eclipse-temurin-21-alpine AS builder
 ENV APP_DIR=/opt/app
 RUN mkdir -p $APP_DIR
 WORKDIR $APP_DIR
-COPY ./pom.xml ./src $APP_DIR
+COPY ./pom.xml $APP_DIR
+RUN mvn dependency:go-offline
+COPY ./src $APP_DIR/src
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-alpine
