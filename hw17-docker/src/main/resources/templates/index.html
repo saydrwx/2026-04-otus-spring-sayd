@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head th:replace="~{fragments/layout :: head(#{main.page.title})}"></head>
+<body class="d-flex flex-column min-vh-100 bg-body-tertiary">
+
+<div th:replace="~{fragments/layout :: header('home')}"></div>
+
+<main class="container flex-grow-1 py-5 my-md-4">
+  <div class="row g-4">
+    <div class="col-md-4">
+      <a class="text-decoration-none text-body" th:href="@{/books}">
+        <article class="card navigation-card h-100 border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3"><i class="bi bi-book"></i></div>
+            <h1 class="h4 card-title" th:text="#{main.books.heading}">Books</h1>
+            <p class="card-text text-secondary mb-0" th:text="#{main.books.description}">
+              View and manage books in the library catalogue.
+            </p>
+          </div>
+        </article>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a class="text-decoration-none text-body" th:href="@{/authors}">
+        <article class="card navigation-card h-100 border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3"><i class="bi bi-person-lines-fill"></i></div>
+            <h1 class="h4 card-title" th:text="#{main.authors.heading}">Authors</h1>
+            <p class="card-text text-secondary mb-0" th:text="#{main.authors.description}">
+              Browse and manage catalogue authors.
+            </p>
+          </div>
+        </article>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a class="text-decoration-none text-body" th:href="@{/genres}">
+        <article class="card navigation-card h-100 border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="feature-icon mb-3"><i class="bi bi-tags"></i></div>
+            <h1 class="h4 card-title" th:text="#{main.genres.heading}">Genres</h1>
+            <p class="card-text text-secondary mb-0" th:text="#{main.genres.description}">
+              Manage the genres used to organize books.
+            </p>
+          </div>
+        </article>
+      </a>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
