@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${title}">Library</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" th:href="@{/css/application.css}">
+</head>
+<body>
+
+<header th:fragment="header(activePage)">
+  <nav class="navbar navbar-expand border-bottom bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+        <i class="bi bi-book-half text-primary"></i>
+        <span th:text="#{application.name}">Library</span>
+      </a>
+
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <ul class="navbar-nav flex-row flex-wrap gap-1 me-2">
+          <li class="nav-item">
+            <a class="nav-link"
+               th:classappend="${activePage == 'books'} ? ' active fw-semibold' : ''"
+               th:href="@{/books}">
+              <i class="bi bi-book me-1"></i>
+              <span th:text="#{navigation.books}">Books</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+               th:classappend="${activePage == 'authors'} ? ' active fw-semibold' : ''"
+               th:href="@{/authors}">
+              <i class="bi bi-people me-1"></i>
+              <span th:text="#{navigation.authors}">Authors</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+               th:classappend="${activePage == 'genres'} ? ' active fw-semibold' : ''"
+               th:href="@{/genres}">
+              <i class="bi bi-tags me-1"></i>
+              <span th:text="#{navigation.genres}">Genres</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="vr d-none d-md-block"></div>
+
+        <div class="btn-group btn-group-sm" role="group" th:attr="aria-label=#{language.selector}">
+          <a class="btn"
+             th:classappend="${#locale.language == 'en'} ? ' btn-primary' : ' btn-outline-secondary'"
+             th:href="@{/(lang=en)}"
+             lang="en">EN</a>
+          <a class="btn"
+             th:classappend="${#locale.language == 'ru'} ? ' btn-primary' : ' btn-outline-secondary'"
+             th:href="@{/(lang=ru)}"
+             lang="ru">RU</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div th:fragment="alerts">
+  <div class="alert alert-success" role="alert"
+       th:if="${successMessageCode}"
+       th:text="${#messages.msg(successMessageCode)}">
+    Operation completed successfully.
+  </div>
+</div>
+
+<footer th:fragment="footer" class="border-top bg-white mt-auto">
+  <div class="container py-3 text-center text-secondary small">
+    <span th:text="#{footer.text}">Library — Spring Boot MVC educational project</span>
+  </div>
+</footer>
+
+</body>
+</html>
