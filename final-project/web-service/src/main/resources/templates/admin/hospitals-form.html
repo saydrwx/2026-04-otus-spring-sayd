@@ -1,0 +1,13 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Запись справочника')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Запись справочника</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<p th:text="${itemId == null ? 'Создать запись' : 'Редактировать запись №' + itemId}"></p>
+<form class="data-form" method="post" th:object="${hospitalForm}" th:action="${itemId == null} ? @{/admin/catalog/hospitals/new} : @{/admin/catalog/hospitals/{id}/edit(id=${itemId})}">
+<div class="notice warning" role="alert" th:if="${#fields.hasAnyErrors()}"><p>Проверьте поля формы.</p><ul><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul></div>
+<label for="name">Название</label>
+<input id="name" type="text" th:field="*{name}" maxlength="255" required>
+<label for="address">Адрес</label>
+<input id="address" type="text" th:field="*{address}" maxlength="300" required>
+<button class="button" type="submit">Сохранить</button></form><p>Изменения вступают в силу сразу. Если запись мог изменить другой администратор, обновите страницу перед редактированием.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

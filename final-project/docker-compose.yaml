@@ -1,0 +1,160 @@
+services:
+  postgres:
+    image: postgres:18.6-alpine
+    container_name: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      - POSTGRES_DB=default_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=directory,postgres_directory,clinic,postgres_clinic
+    volumes:
+      - ./scripts/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  directory-service:
+    container_name: directory-service
+    build:
+      context: ./directory-service
+    ports:
+      - "127.0.0.1:8081:8081"
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://postgres:5432/directory
+      - POSTGRES_USER=postgres_directory
+      - POSTGRES_PASSWORD=postgres_directory
+      - AUTH_ISSUER=http://127.0.0.1:9000
+      - AUTH_JWK_SET_URI=http://authorization-server:9000/oauth2/jwks
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8081/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  auth-postgres:
+    image: postgres:18.6-alpine
+    container_name: auth-postgres
+    environment:
+      POSTGRES_DB: authorization
+      POSTGRES_USER: postgres_authorization
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:?Copy .env.auth.example to .env.auth}
+    volumes:
+      - auth_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_authorization -d authorization"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  auth-key-init:
+    image: eclipse-temurin:25-jdk-alpine
+    container_name: auth-key-init
+    environment:
+      KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD:?Set KEYSTORE_PASSWORD}
+    volumes:
+      - auth_keys:/keys
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        if [ ! -f /keys/signing.p12 ]; then
+          umask 077
+          keytool -genkeypair -alias hospital-signing -keyalg RSA -keysize 3072 -storetype PKCS12 -keystore /keys/signing.p12 -storepass:env KEYSTORE_PASSWORD -keypass:env KEYSTORE_PASSWORD -dname 'CN=Hospital local token signing' -validity 3650
+        fi
+        chown 10001:10001 /keys /keys/signing.p12
+        chmod 700 /keys
+        chmod 400 /keys/signing.p12
+
+  authorization-server:
+    build: ./authorization-server
+    container_name: authorization-server
+    ports:
+      - "127.0.0.1:9000:9000"
+    environment:
+      SPRING_PROFILES_ACTIVE: demo
+      POSTGRES_URL: jdbc:postgresql://auth-postgres:5432/authorization
+      POSTGRES_USER: postgres_authorization
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:?Set AUTH_DB_PASSWORD}
+      ISSUER: http://127.0.0.1:9000
+      SIGNING_KEY_PATH: file:/opt/app/keys/signing.p12
+      KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD:?Set KEYSTORE_PASSWORD}
+      CLIENT_SECRET: ${CLIENT_SECRET:?Set CLIENT_SECRET}
+    volumes:
+      - auth_keys:/opt/app/keys:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:9000/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    depends_on:
+      auth-postgres:
+        condition: service_healthy
+      auth-key-init:
+        condition: service_completed_successfully
+
+  clinic-service:
+    build: ./clinic-service
+    container_name: clinic-service
+    ports:
+      - "127.0.0.1:8082:8082"
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/clinic
+      POSTGRES_USER: postgres_clinic
+      POSTGRES_PASSWORD: postgres_clinic
+      DIRECTORY_BASE_URL: http://directory-service:8081
+      AUTH_ISSUER: http://127.0.0.1:9000
+      AUTH_JWK_SET_URI: http://authorization-server:9000/oauth2/jwks
+      DOCUMENT_STORAGE_ROOT: /opt/app/documents
+    volumes:
+      - clinic_documents:/opt/app/documents
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:8082/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web-service:
+    build: ./web-service
+    container_name: web-service
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      CLIENT_SECRET: ${CLIENT_SECRET:?Use the existing hospital-web CLIENT_SECRET}
+      WEB_PUBLIC_BASE_URL: http://127.0.0.1:8080
+      AUTH_ISSUER: http://127.0.0.1:9000
+      AUTH_BACKEND_BASE_URL: http://authorization-server:9000
+      CLINIC_BASE_URL: http://clinic-service:8082
+      DIRECTORY_BASE_URL: http://directory-service:8081
+    healthcheck:
+      test: ["CMD","wget","-q","-O","-","http://127.0.0.1:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
+    depends_on:
+      directory-service:
+        condition: service_healthy
+      authorization-server:
+        condition: service_healthy
+      clinic-service:
+        condition: service_healthy
+
+
+volumes:
+  postgres_data:
+  auth_data:
+  auth_keys:
+  clinic_documents:

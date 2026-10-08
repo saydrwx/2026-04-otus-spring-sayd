@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: authorization-server
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  flyway:
+    enabled: true
+
+server:
+  port: 9000
+  shutdown: graceful
+  servlet:
+    session:
+      cookie:
+        name: AUTHSESSION
+        http-only: true
+        same-site: lax
+      timeout: 20m
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+app:
+  auth:
+    issuer: ${ISSUER:http://127.0.0.1:9000}
+    key-store: ${SIGNING_KEY_PATH:file:./keys/signing.p12}
+    key-store-password: ${KEYSTORE_PASSWORD}
+    client-secret: ${CLIENT_SECRET}

@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Все записи на приём')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Все записи на приём</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<p>Сортировка по времени начала, затем по идентификатору. Время указано в UTC+03:00. Имена пациентов и медицинские данные не отображаются.</p><p>Всего: <span th:text="${appointments.totalElements}"></span></p>
+<p class="notice" th:if="${#lists.isEmpty(appointments.content)}">На этой странице записей нет.</p>
+<article class="panel" th:each="appointment : ${appointments.content}"><h2 th:text="${@clinicTimes.dateTime(appointment.start)}"></h2><p th:text="${@clinicTimes.status(appointment.status)}"></p><p>Врач №<span th:text="${appointment.doctorId}"></span> · Больница на момент записи №<span th:text="${appointment.hospitalId}"></span></p><a th:href="@{/admin/appointments/{id}(id=${appointment.id})}">Открыть сведения для администрирования</a></article>
+<nav class="pagination" aria-label="Страницы записей на приём"><a th:if="${appointments.page > 0}" th:href="@{/admin/appointments(page=${appointments.page - 1})}">Назад</a><a th:if="${appointments.page + 1 < appointments.totalPages}" th:href="@{/admin/appointments(page=${appointments.page + 1})}">Далее</a></nav>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

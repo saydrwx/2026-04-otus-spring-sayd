@@ -1,0 +1,10 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Не удалось выполнить медицинское действие')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Медицинские записи</p><h1>Не удалось выполнить запрос</h1><p role="alert" th:text="${message}"></p>
+<div class="profile-actions"><a th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">Мои записи на приём</a>
+<a th:unless="${doctorView}" th:href="@{/patient/reports}">Мои заключения</a>
+<th:block th:if="${appointmentId != null}"><a th:href="${doctorView} ? @{/doctor/appointments/{id}(id=${appointmentId})} : @{/patient/appointments/{id}(id=${appointmentId})}">Проверить запись</a>
+<a th:if="${doctorView}" th:href="@{/doctor/appointments/{id}/report(id=${appointmentId})}">Проверить заключение</a>
+<a th:unless="${doctorView}" th:href="@{/patient/appointments/{id}/review(id=${appointmentId})}">Проверить отзыв</a></th:block></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

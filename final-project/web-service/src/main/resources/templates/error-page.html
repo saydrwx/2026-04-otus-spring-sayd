@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Не удалось открыть страницу')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow" th:text="${status}"></p>
+<h1>Не удалось открыть страницу</h1><p role="alert" th:text="${message}"></p><a class="button" th:href="@{/doctors}">К списку врачей</a>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,8 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Удалить документ')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Пациент · Мои документы</p><h1>Удалить этот документ?</h1>
+<p class="document-name"><bdi th:text="${document.filename}"></bdi></p><p>Документ будет удалён из вашего списка. Врачи больше не смогут скачать его через это приложение.</p>
+<form th:action="@{/patient/documents/{id}/delete(id=${document.id})}" method="post"><button class="button secondary" type="submit">Подтвердить удаление</button></form>
+<p class="form-footnote"><a th:href="@{/patient/documents/{id}(id=${document.id})}">Оставить документ</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

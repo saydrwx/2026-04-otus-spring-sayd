@@ -3,3 +3,5 @@ target/
 .mvn/
 spring-shell.log
 logs/
+**/keys/
+.manual-auth/

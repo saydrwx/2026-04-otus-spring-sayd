@@ -1,0 +1,6 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Превышен допустимый размер файла')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Ограничение размера файла</p><h1>Размер файла превышает ограничение</h1>
+<p role="alert">Выберите один файл размером до 5 МиБ (5 242 880 байт).</p><a class="button" th:href="@{/patient/documents/upload}">Вернуться к загрузке</a>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

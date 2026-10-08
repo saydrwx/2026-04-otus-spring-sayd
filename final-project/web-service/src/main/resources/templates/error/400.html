@@ -1,0 +1,6 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Не удалось обработать запрос')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><h1>Не удалось обработать запрос</h1>
+<p role="alert">Проверьте введённые данные и отправьте форму повторно.</p><a th:href="@{/}">На главную</a>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

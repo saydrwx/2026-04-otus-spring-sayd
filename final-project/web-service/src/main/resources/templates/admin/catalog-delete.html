@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Подтверждение удаления из справочника')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Подтверждение удаления из справочника</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<p>Удалить <strong th:text="${row.label}"></strong> (#<span th:text="${row.id}"></span>) из раздела «<span th:text="${@uiLabels.catalog(kind)}"></span>»?</p>
+<p>Удаление связанной записи может быть отклонено. В существующих записях на приём сохраняются исходные идентификаторы врача и больницы. Удаление врача может повлиять на доступность приёмов — сначала проверьте активные записи и настройки сотрудника.</p>
+<form method="post" th:action="@{/admin/catalog/{kind}/{id}/delete(kind=${kind},id=${row.id})}"><button type="submit">Подтвердить удаление</button></form>
+<a th:href="@{/admin/catalog/{kind}(kind=${kind})}">Оставить запись</a>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

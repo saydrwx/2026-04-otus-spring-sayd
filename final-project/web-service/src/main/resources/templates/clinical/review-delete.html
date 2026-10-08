@@ -1,0 +1,8 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Удалить отзыв')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Пациент · Отзыв о приёме</p><h1>Удалить ваш отзыв?</h1>
+<p><span th:text="${review.rating}"></span> из 5</p><p class="clinical-text" th:text="${review.text}"></p>
+<p>Текущий отзыв об этом приёме будет удалён.</p><form th:action="@{/patient/appointments/{id}/review/delete(id=${appointment.id})}" method="post"><button type="submit" class="button secondary">Удалить отзыв</button></form>
+<p class="form-footnote"><a th:href="@{/patient/appointments/{id}/review(id=${appointment.id})}">Оставить отзыв</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

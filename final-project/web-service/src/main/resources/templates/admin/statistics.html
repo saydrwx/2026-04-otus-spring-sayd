@@ -1,0 +1,15 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Статистика приёмов')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Статистика приёмов</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<p>Приёмы сгруппированы по дате начала в UTC+03:00, текущему статусу и больнице на момент записи. Конечная дата не включается. Максимальный период — 366 дней. По умолчанию показаны сегодня и предыдущие 29 дней.</p>
+<form class="data-form" method="get" th:action="@{/admin/statistics}"><label for="from">С даты (включительно)</label><input id="from" name="from" type="date" min="1900-01-01" max="9999-12-31" th:value="${filter.from}" required>
+<label for="to">До даты (не включительно)</label><input id="to" name="to" type="date" min="1900-01-01" max="9999-12-31" th:value="${filter.to}" required>
+<label for="doctorId">Идентификатор врача (необязательно)</label><input id="doctorId" name="doctorId" type="number" min="1" th:value="${filter.doctorId}">
+<label for="hospitalId">Идентификатор больницы на момент записи (необязательно)</label><input id="hospitalId" name="hospitalId" type="number" min="1" th:value="${filter.hospitalId}"><button class="button" type="submit">Показать статистику</button></form>
+<p>Всего записей: <strong th:text="${statistics.total}"></strong></p>
+<p><a class="button" th:href="@{/admin/statistics.csv(from=${filter.from},to=${filter.to},doctorId=${filter.doctorId},hospitalId=${filter.hospitalId})}">Скачать CSV</a></p>
+<p class="notice" th:if="${#lists.isEmpty(statistics.rows)}">За выбранный период записей нет.</p>
+<table th:unless="${#lists.isEmpty(statistics.rows)}"><thead><tr><th scope="col">Идентификатор врача</th><th scope="col">Идентификатор больницы на момент записи</th><th scope="col">Статус</th><th scope="col">Количество</th></tr></thead><tbody><tr th:each="row : ${statistics.rows}"><td th:text="${row.doctorId}"></td><td th:text="${row.hospitalId}"></td><td th:text="${@clinicTimes.status(row.status)}"></td><td th:text="${row.count}"></td></tr></tbody></table>
+<p>CSV содержит только идентификаторы и итоговые количества. Выгрузка отражает текущее состояние данных: после изменения записей результат может отличаться от ранее открытой страницы.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

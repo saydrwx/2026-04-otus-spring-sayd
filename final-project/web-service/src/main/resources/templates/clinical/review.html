@@ -1,0 +1,11 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Отзыв о приёме')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Отзыв о приёме</p><h1>Отзыв о приёме</h1>
+<p th:text="${@clinicTimes.dateTime(appointment.start)}"></p>
+<th:block th:if="${review != null}"><h2><span th:text="${review.rating}"></span> из 5</h2><p class="clinical-text" th:text="${#strings.isEmpty(review.text) ? 'Комментарий отсутствует.' : review.text}"></p>
+<p class="muted">Последнее сохранение <span th:text="${@clinicTimes.instant(review.updatedAt)}"></span> (UTC+03:00).</p>
+<div class="profile-actions" th:if="${canReview}"><a class="button" th:href="@{/patient/appointments/{id}/review/edit(id=${appointment.id})}">Редактировать отзыв</a><a th:href="@{/patient/appointments/{id}/review/delete(id=${appointment.id})}">Удалить отзыв</a></div></th:block>
+<th:block th:if="${review == null}"><p>Для этого приёма пока нет доступного отзыва.</p><a th:if="${canReview}" class="button" th:href="@{/patient/appointments/{id}/review/new(id=${appointment.id})}">Оставить отзыв</a></th:block>
+<p class="form-footnote"><a th:href="${doctorView} ? @{/doctor/appointments/{id}(id=${appointment.id})} : @{/patient/appointments/{id}(id=${appointment.id})}">Вернуться к записи</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

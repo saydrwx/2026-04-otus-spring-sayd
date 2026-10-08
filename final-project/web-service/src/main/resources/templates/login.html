@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Войти')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel login-panel"><p class="eyebrow">Ваш кабинет</p><h1>С возвращением</h1>
+<p>Перейдите на защищённую страницу входа и введите электронную почту и пароль.</p>
+<p th:if="${loginError}" role="alert" class="notice error">Не удалось выполнить вход. Повторите попытку.</p>
+<a class="button" th:href="@{/oauth2/authorization/hospital}">Перейти ко входу →</a>
+<p class="form-footnote">Впервые у нас? <a th:href="@{/register}">Создать учётную запись пациента</a>.</p>
+<p class="muted">Вы также можете <a th:href="@{/doctors}">посмотреть врачей</a> без входа в систему.</p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

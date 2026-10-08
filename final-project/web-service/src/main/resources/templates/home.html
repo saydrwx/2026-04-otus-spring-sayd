@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Главная')}"></head>
+<body hx-history="false">
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+  <section class="hero"><p class="eyebrow">Добро пожаловать в клинику</p><h1>Найдите подходящего врача<br>и запишитесь на приём.</h1>
+    <p>Узнайте о наших больницах и специалистах. Выберите врача с подходящими опытом и квалификацией.</p>
+    <a class="button" th:href="@{/doctors}">Посмотреть врачей <span aria-hidden="true">→</span></a>
+  </section>
+  <section class="intro-grid" aria-label="Начните здесь">
+    <article class="panel"><h2>Найдите своего специалиста</h2><p>Выберите больницу и специальности, затем ознакомьтесь с профилями врачей.</p></article>
+    <article class="panel"><h2>Уже есть учётная запись?</h2><p>Войдите, чтобы получить доступ к личному кабинету.</p><a th:href="@{/login}">Войти →</a></article>
+  </section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer>
+</body></html>

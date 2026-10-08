@@ -1,0 +1,7 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Управление записью на приём')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Управление записью на приём</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<section class="panel"><dl><dt>Идентификатор записи</dt><dd th:text="${appointment.id}"></dd><dt>Идентификатор пациента</dt><dd th:text="${appointment.patientId}"></dd><dt>Идентификатор врача</dt><dd th:text="${appointment.doctorId}"></dd><dt>Идентификатор больницы на момент записи</dt><dd th:text="${appointment.hospitalId}"></dd><dt>Начало (UTC+03:00)</dt><dd th:text="${@clinicTimes.dateTime(appointment.start)}"></dd><dt>Окончание (UTC+03:00)</dt><dd th:text="${@clinicTimes.dateTime(appointment.end)}"></dd><dt>Статус</dt><dd th:text="${@clinicTimes.status(appointment.status)}"></dd></dl>
+<form th:if="${cancellable}" method="post" th:action="@{/admin/appointments/{id}/cancel(id=${appointment.id})}"><p>Отменить эту запись? История изменений сохранится, а время станет доступно другим пациентам.</p><button type="submit">Подтвердить отмену</button></form><p th:unless="${cancellable}">Отменить можно только активную запись до начала приёма.</p></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

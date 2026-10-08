@@ -1,0 +1,8 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Не удалось выполнить действие с документом')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Документы</p><h1>Не удалось выполнить запрос</h1><p role="alert" th:text="${message}"></p>
+<div class="profile-actions"><a th:unless="${doctorView}" th:href="@{/patient/documents}">Проверить мои документы</a>
+<a th:if="${documentId != null}" th:href="${doctorView} ? @{/doctor/documents/{id}(id=${documentId})} : @{/patient/documents/{id}(id=${documentId})}">Проверить документ</a>
+<a th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">Мои записи на приём</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ошибка запроса')}"></head>
+<body hx-history="false">
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow">
+  <h1>Не удалось выполнить запрос</h1>
+  <p>Код ошибки: <span th:text="${status}"></span></p>
+  <div th:switch="${status}" class="notice error" role="alert">
+    <p th:case="400">Проверьте введённые данные и повторите запрос.</p>
+    <p th:case="401">Для продолжения войдите в систему.</p>
+    <p th:case="403">У вас нет прав на это действие. Обновите страницу перед повторной отправкой формы.</p>
+    <p th:case="404">Страница или запись не найдены.</p>
+    <p th:case="405">Этот способ отправки запроса не поддерживается.</p>
+    <p th:case="413">Максимальный размер файла — 5 МиБ (5 242 880 байт).</p>
+    <p th:case="415">Формат отправленных данных не поддерживается.</p>
+    <p th:case="503">Сервис временно недоступен. Повторите попытку позже.</p>
+    <p th:case="*">Произошла ошибка. Повторите попытку позже.</p>
+  </div>
+  <p><a th:href="@{/}">На главную</a> · <a th:href="@{/login}">Войти</a></p>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

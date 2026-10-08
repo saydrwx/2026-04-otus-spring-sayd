@@ -1,0 +1,16 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('История заключений')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container"><p class="eyebrow" th:text="${doctorView ? 'Медицинские записи пациента' : 'Медицинские записи'}"></p><h1>История заключений</h1>
+<p>Сначала показаны последние заключения. Время указано в UTC+03:00.</p>
+<p th:if="${doctorView}" class="muted">Идентификатор пациента: <span th:text="${patientId}"></span></p>
+<p class="notice" th:if="${reports.totalElements == 0}">В этой истории пока нет доступных заключений.</p>
+<p class="notice" th:if="${reports.totalElements > 0 and #lists.isEmpty(reports.content)}">На этой странице заключений нет. <a th:href="${doctorView} ? @{/doctor/patients/{id}/reports(id=${patientId})} : @{/patient/reports}">Вернуться на первую страницу</a>.</p>
+<div class="appointment-grid"><article class="panel" th:each="report : ${reports.content}"><p class="eyebrow">Заключение по приёму</p>
+<h2 th:text="${@clinicTimes.instant(report.submittedAt)}"></h2><p th:text="${labels.doctors[report.doctorId] ?: 'Сведения о враче недоступны'}"></p>
+<p class="muted" th:text="${labels.hospitals[report.hospitalId] ?: 'Сведения о больнице недоступны'}"></p>
+<a th:href="${doctorView} ? @{/doctor/appointments/{id}/report(id=${report.appointmentId})} : @{/patient/appointments/{id}/report(id=${report.appointmentId})}">Открыть заключение →</a></article></div>
+<nav class="pagination" aria-label="Страницы истории заключений"><a th:if="${reports.page > 0}" th:href="${doctorView} ? @{/doctor/patients/{id}/reports(id=${patientId},page=${reports.page - 1})} : @{/patient/reports(page=${reports.page - 1})}">← Назад</a>
+<span th:if="${reports.totalPages > 0}">Страница <span th:text="${reports.page + 1}"></span></span>
+<a th:if="${reports.page + 1 < reports.totalPages}" th:href="${doctorView} ? @{/doctor/patients/{id}/reports(id=${patientId},page=${reports.page + 1})} : @{/patient/reports(page=${reports.page + 1})}">Далее →</a></nav>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,21 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Запись справочника')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Запись справочника</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<p th:text="${itemId == null ? 'Создать запись' : 'Редактировать запись №' + itemId}"></p>
+<form class="data-form" method="post" th:object="${doctorForm}" th:action="${itemId == null} ? @{/admin/catalog/doctors/new} : @{/admin/catalog/doctors/{id}/edit(id=${itemId})}">
+<div class="notice warning" role="alert" th:if="${#fields.hasAnyErrors()}"><p>Проверьте поля формы.</p><ul><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul></div>
+<label for="firstName">Имя</label>
+<input id="firstName" type="text" th:field="*{firstName}" maxlength="255" required>
+<label for="lastName">Фамилия</label>
+<input id="lastName" type="text" th:field="*{lastName}" maxlength="255" required>
+<label for="education">Образование</label>
+<textarea id="education" th:field="*{education}" maxlength="1000"></textarea>
+<label for="experienceYears">Стаж работы (лет)</label>
+<input id="experienceYears" type="number" th:field="*{experienceYears}" min="0" max="2147483647" required>
+<label for="email">Электронная почта</label>
+<input id="email" type="email" th:field="*{email}" maxlength="255">
+<label for="hospitalId">Больница</label><select id="hospitalId" th:field="*{hospitalId}" required><option value="">Выберите больницу</option><option th:each="hospital : ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}"></option></select>
+<fieldset><legend>Специальности (выберите от 1 до 20)</legend><label th:each="specialty : ${specialties}"><input type="checkbox" th:field="*{specialtyIds}" th:value="${specialty.id}"><span th:text="${specialty.name}"></span></label></fieldset>
+<p class="notice">Изменяется только публичный справочник. Учётная запись, привязка врача и расписание не создаются. Сохраняйте существующие привязки и расписания; новых сотрудников настраивайте отдельно.</p><button class="button" type="submit">Сохранить</button></form><p>Изменения вступают в силу сразу. Если запись мог изменить другой администратор, обновите страницу перед редактированием.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

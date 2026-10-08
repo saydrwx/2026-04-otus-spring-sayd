@@ -1,0 +1,16 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Документы')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container"><p class="eyebrow" th:text="${doctorView ? 'Медицинские записи пациента' : 'Медицинские записи'}"></p><h1>Документы</h1>
+<p>Сначала показаны последние загруженные документы. Время указано в UTC+03:00.</p><p th:if="${doctorView}" class="muted">Идентификатор пациента: <span th:text="${patientId}"></span></p>
+<p th:unless="${doctorView}"><a class="button" th:href="@{/patient/documents/upload}">Загрузить документ</a></p>
+<p class="notice" th:if="${documents.totalElements == 0}">В этом списке пока нет доступных документов.</p>
+<p class="notice" th:if="${documents.totalElements > 0 and #lists.isEmpty(documents.content)}">На этой странице документов нет. <a th:href="${doctorView} ? @{/doctor/patients/{id}/documents(id=${patientId})} : @{/patient/documents}">Вернуться на первую страницу</a>.</p>
+<div class="appointment-grid"><article class="panel document-card" th:each="document : ${documents.content}"><p class="eyebrow" th:text="${@documentFiles.typeLabel(document.mediaType)}"></p>
+<h2><a th:href="${doctorView} ? @{/doctor/documents/{id}(id=${document.id})} : @{/patient/documents/{id}(id=${document.id})}"><bdi th:text="${document.filename}"></bdi></a></h2>
+<p class="muted"><span th:text="${@documentFiles.sizeLabel(document.sizeBytes)}"></span> · <span th:text="${@clinicTimes.instant(document.uploadedAt)}"></span></p>
+<a th:href="${doctorView} ? @{/doctor/documents/{id}/download(id=${document.id})} : @{/patient/documents/{id}/download(id=${document.id})}">Скачать файл →</a></article></div>
+<nav class="pagination" aria-label="Страницы документов"><a th:if="${documents.page > 0}" th:href="${doctorView} ? @{/doctor/patients/{id}/documents(id=${patientId},page=${documents.page - 1})} : @{/patient/documents(page=${documents.page - 1})}">← Назад</a>
+<span th:if="${documents.totalPages > 0}">Страница <span th:text="${documents.page + 1}"></span></span>
+<a th:if="${documents.page + 1 < documents.totalPages}" th:href="${doctorView} ? @{/doctor/patients/{id}/documents(id=${patientId},page=${documents.page + 1})} : @{/patient/documents(page=${documents.page + 1})}">Далее →</a></nav>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

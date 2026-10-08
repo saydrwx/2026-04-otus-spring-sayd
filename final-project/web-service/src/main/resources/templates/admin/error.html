@@ -1,0 +1,6 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Не удалось выполнить действие')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Не удалось выполнить действие</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<div class="notice warning" role="alert" th:text="${message}"></div><p>Если сохранение или удаление не подтверждено, сначала проверьте текущее состояние записи. Откройте нужный справочник через раздел «Администрирование».</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
