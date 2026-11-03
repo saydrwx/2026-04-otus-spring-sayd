@@ -1,0 +1,10 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Мой профиль')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel profile"><p class="eyebrow">Кабинет пациента</p><h1>Мой профиль</h1>
+<dl><dt>Имя</dt><dd th:text="${profile.firstName}"></dd>
+<dt>Фамилия</dt><dd th:text="${profile.lastName}"></dd>
+<dt>Отчество</dt><dd th:text="${#strings.isEmpty(profile.middleName) ? 'Не указано' : profile.middleName}"></dd>
+<dt>Дата рождения</dt><dd th:text="${@clinicTimes.calendarDate(profile.birthDate)}"></dd></dl>
+<div class="profile-actions"><a th:href="@{/patient/documents}">Мои документы</a><a th:href="@{/patient/reports}">Мои заключения</a><a class="button" th:href="@{/patient/appointments}">Мои записи на приём</a><a class="button" th:href="@{/patient/profile/edit}">Редактировать профиль</a><a th:href="@{/doctors}">Найти врача →</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

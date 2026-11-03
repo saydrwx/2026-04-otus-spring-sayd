@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: clinic-service
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 5242880B
+      max-request-size: 6291456B
+      file-size-threshold: 0B
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  flyway:
+    enabled: true
+
+server:
+  port: 8082
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: WARN
+
+app:
+  directory:
+    base-url: ${DIRECTORY_BASE_URL:http://127.0.0.1:8081}
+    connect-timeout: ${DIRECTORY_CONNECT_TIMEOUT:1s}
+    read-timeout: ${DIRECTORY_READ_TIMEOUT:2s}
+
+  documents:
+    root: ${DOCUMENT_STORAGE_ROOT:./data/documents}
+    cleanup-grace: ${DOCUMENT_CLEANUP_GRACE:PT1H}
+    cleanup-delay: ${DOCUMENT_CLEANUP_DELAY:PT1M}
+    cleanup-enabled: ${DOCUMENT_CLEANUP_ENABLED:true}

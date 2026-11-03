@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вход в систему · Клиника</title>
+  <link rel="stylesheet" th:href="@{/css/auth-login.css}">
+</head>
+<body>
+<main class="login-panel">
+  <p class="eyebrow">Клиника</p>
+  <h1>Вход в систему</h1>
+  <p>Введите электронную почту и пароль от своей учётной записи.</p>
+  <p th:if="${loginError}" class="notice error" role="alert">Не удалось войти. Проверьте электронную почту и пароль.</p>
+  <p th:if="${loggedOut}" class="notice" role="status">Вы вышли из системы.</p>
+  <form th:action="@{/login}" method="post">
+    <label for="username">Электронная почта</label>
+    <input id="username" name="username" type="email" autocomplete="username" required autofocus>
+    <label for="password">Пароль</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Войти</button>
+  </form>
+  <p class="muted">После входа вы вернётесь в приложение клиники.</p>
+</main>
+</body>
+</html>

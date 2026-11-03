@@ -1,0 +1,18 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Сведения о записи на приём')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><a class="back-link" th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">← Мои записи</a>
+<section class="panel profile"><p class="eyebrow" th:text="${@clinicTimes.status(appointment.status)}"></p><h1>Сведения о записи на приём</h1>
+<dl><dt>Начало</dt><dd th:text="${@clinicTimes.dateTime(appointment.start)}"></dd><dt>Окончание</dt><dd th:text="${@clinicTimes.dateTime(appointment.end)}"></dd>
+<dt>Врач</dt><dd th:text="${labels.doctors[appointment.doctorId] ?: 'Сведения о враче недоступны'}"></dd>
+<dt>Больница</dt><dd th:text="${labels.hospitals[appointment.hospitalId] ?: 'Сведения о больнице недоступны'}"></dd>
+<th:block th:if="${doctorView}"><dt>Идентификатор пациента</dt><dd class="reference" th:text="${appointment.patientId}"></dd></th:block></dl>
+<p class="muted section-space">Время указано в UTC+03:00. Показана больница, указанная при создании записи.</p>
+<div class="profile-actions"><a th:href="@{/doctors/{id}(id=${appointment.doctorId})}">Профиль врача</a><a th:if="${canCancel}" class="button secondary" th:href="@{/patient/appointments/{id}/cancel(id=${appointment.id})}">Отменить запись</a></div>
+<div class="profile-actions section-space" th:if="${appointment.status.name() == 'COMPLETED'}">
+<a th:href="${doctorView} ? @{/doctor/appointments/{id}/report(id=${appointment.id})} : @{/patient/appointments/{id}/report(id=${appointment.id})}">Открыть заключение</a>
+<a th:href="${doctorView} ? @{/doctor/appointments/{id}/review(id=${appointment.id})} : @{/patient/appointments/{id}/review(id=${appointment.id})}">Отзыв о приёме</a></div>
+<div class="profile-actions section-space" th:if="${doctorView}"><a th:href="@{/doctor/patients/{id}/reports(id=${appointment.patientId})}">История заключений пациента</a><a th:href="@{/doctor/patients/{id}/documents(id=${appointment.patientId})}">Документы пациента</a></div>
+<p class="muted section-space" th:if="${doctorView and appointment.status.name() == 'BOOKED' and !canRecordOutcome}">Заключение или неявку можно зафиксировать не раньше <span th:text="${@clinicTimes.dateTime(appointment.end)}"></span>.</p>
+<th:block th:if="${canRecordOutcome}"><h2 class="section-space">Зафиксировать результат приёма</h2><p>Доступные действия также зависят от вашей текущей больницы и прав в клинике.</p><div class="profile-actions"><a class="button" th:href="@{/doctor/appointments/{id}/report/new(id=${appointment.id})}">Написать заключение</a><a th:href="@{/doctor/appointments/{id}/no-show(id=${appointment.id})}">Зафиксировать неявку</a></div></th:block>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

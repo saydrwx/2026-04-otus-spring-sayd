@@ -1,0 +1,21 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Доступное время приёма')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><a class="back-link" th:href="@{/doctors/{id}(id=${doctor.id})}">← Профиль врача</a>
+<section class="panel"><p class="eyebrow" th:text="${doctor.hospital.name}"></p><h1 th:text="${doctor.firstName + ' ' + doctor.lastName}"></h1>
+<h2>Доступное время приёма</h2><p>Время указано в часовом поясе клиники: <strong>UTC+03:00</strong>.</p>
+<p class="muted">Текущий период записи: <span th:text="${@clinicTimes.dateTime(availability.earliestStart)}"></span> по <span th:text="${@clinicTimes.dateTime(availability.latestStart)}"></span>.</p>
+<form class="date-filter" th:action="@{/doctors/{id}/availability(id=${doctor.id})}" method="get">
+<label for="date">Выберите дату</label><input id="date" type="date" name="date" required th:value="${selectedDate}"
+ th:min="${@clinicTimes.date(availability.earliestStart)}" th:max="${@clinicTimes.date(availability.latestStart)}"><button type="submit" class="button">Показать время</button></form>
+<h3 class="section-space" th:text="${@clinicTimes.calendarDate(selectedDate)}"></h3>
+<p th:if="${#lists.isEmpty(availability.slots)}" class="notice">На выбранную дату нет свободного времени в текущем периоде записи. Выберите другую дату.</p>
+<ul class="slot-grid" th:unless="${#lists.isEmpty(availability.slots)}">
+<li th:each="slot : ${availability.slots}">
+<a sec:authorize="hasRole('PATIENT')" class="slot" th:href="@{/patient/appointments/new(doctorId=${doctor.id},start=${slot.start})}"><span th:text="${@clinicTimes.time(slot.start)}"></span>–<span th:text="${@clinicTimes.time(slot.end)}"></span></a>
+<span sec:authorize="!hasRole('PATIENT')" class="slot"><span th:text="${@clinicTimes.time(slot.start)}"></span>–<span th:text="${@clinicTimes.time(slot.end)}"></span></span>
+</li></ul>
+<p sec:authorize="isAnonymous()"><a th:href="@{/login}">Войти</a> или <a th:href="@{/register}">создать учётную запись пациента</a> чтобы записаться на приём.</p>
+<p sec:authorize="hasRole('PATIENT')" class="muted">Выберите время, чтобы перейти к подтверждению записи. До подтверждения свободное время может измениться.</p>
+<details class="section-space"><summary>Расписание на неделю</summary><ul class="schedule-list"><li th:each="day : ${schedule.workingDays}"><strong th:text="${@clinicTimes.day(day.dayOfWeek)}"></strong>: <span th:text="${@clinicTimes.time(day.startTime)}"></span>–<span th:text="${@clinicTimes.time(day.endTime)}"></span></li></ul><p th:if="${#lists.isEmpty(schedule.workingDays)}">Регулярное расписание не указано.</p></details>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Зафиксировать неявку')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Врач · Результат приёма</p><h1>Зафиксировать неявку?</h1>
+<p>Запись на приём: <span th:text="${@clinicTimes.dateTime(appointment.start)}"></span><br>Идентификатор пациента: <span class="reference" th:text="${appointment.patientId}"></span></p>
+<p class="notice">Подтвердите, что пациент не пришёл. Будет зафиксирован окончательный статус неявки; заключение не создаётся.</p>
+<form th:action="@{/doctor/appointments/{id}/no-show(id=${appointment.id})}" method="post"><button type="submit" class="button secondary">Подтвердить неявку</button></form>
+<p class="form-footnote"><a th:href="@{/doctor/appointments/{id}(id=${appointment.id})}">Вернуться к записи</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

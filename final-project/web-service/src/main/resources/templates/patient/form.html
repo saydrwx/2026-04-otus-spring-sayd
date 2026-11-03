@@ -1,0 +1,20 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Профиль пациента')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Ваши данные</p>
+<h1 th:text="${creating ? 'Заполните профиль' : 'Редактирование профиля'}"></h1>
+<p>Профиль связан с вашей учётной записью.</p>
+<p th:if="${message != null}" class="notice error" role="alert" th:text="${message}"></p>
+<form class="data-form" th:action="${creating} ? @{/patient/onboarding} : @{/patient/profile}" th:object="${profileForm}" method="post">
+<div th:if="${#fields.hasAnyErrors()}" class="notice error" role="alert"><p>Проверьте выделенные поля.</p><p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p></div>
+<label for="firstName">Имя</label><input id="firstName" type="text" th:field="*{firstName}" autocomplete="given-name" maxlength="100" required th:errorclass="invalid" aria-describedby="firstName-error">
+<p id="firstName-error" class="field-error" th:if="${#fields.hasErrors('firstName')}">Укажите имя: не более 100 символов.</p>
+<label for="lastName">Фамилия</label><input id="lastName" type="text" th:field="*{lastName}" autocomplete="family-name" maxlength="100" required th:errorclass="invalid" aria-describedby="lastName-error">
+<p id="lastName-error" class="field-error" th:if="${#fields.hasErrors('lastName')}">Укажите фамилию: не более 100 символов.</p>
+<label for="middleName">Отчество <span class="muted">(необязательно)</span></label><input id="middleName" type="text" th:field="*{middleName}" autocomplete="additional-name" maxlength="100" th:errorclass="invalid" aria-describedby="middleName-error">
+<p id="middleName-error" class="field-error" th:if="${#fields.hasErrors('middleName')}">Не более 100 символов.</p>
+<label for="birthDate">Дата рождения</label><input id="birthDate" type="date" th:field="*{birthDate}" autocomplete="bday" required th:errorclass="invalid" aria-describedby="birthDate-error">
+<p id="birthDate-error" class="field-error" th:if="${#fields.hasErrors('birthDate')}">Укажите корректную дату раньше сегодняшнего дня.</p>
+<button type="submit" class="button" th:text="${creating ? 'Заполнить профиль' : 'Сохранить изменения'}"></button>
+</form><p class="form-footnote"><a th:href="@{/patient/profile}">Проверить профиль</a> · <a th:href="@{/doctors}">Посмотреть врачей</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

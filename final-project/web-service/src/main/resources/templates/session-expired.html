@@ -1,0 +1,6 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Войти снова')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Ваш сеанс</p><h1>Войдите снова</h1>
+<p>Не удалось продолжить сеанс. Если вы отправляли запрос, после входа проверьте его результат перед повторной отправкой.</p>
+<a class="button" th:href="@{/login}">Войти →</a></section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

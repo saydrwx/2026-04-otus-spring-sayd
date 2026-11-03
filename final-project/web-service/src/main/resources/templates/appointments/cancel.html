@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Отменить запись')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow" th:text="${@clinicTimes.status(appointment.status)}"></p><h1>Отменить эту запись на приём?</h1>
+<p th:text="${@clinicTimes.dateTime(appointment.start)}"></p><p th:text="${labels.doctors[appointment.doctorId] ?: 'Сведения о враче недоступны'}"></p>
+<th:block th:if="${canCancel}"><p>После отмены это время станет доступно другим пациентам.</p><form th:action="@{/patient/appointments/{id}/cancel(id=${appointment.id})}" method="post"><button class="button secondary" type="submit">Подтвердить отмену</button></form></th:block>
+<p th:unless="${canCancel}">Эта запись уже отменена или больше не может быть отменена.</p>
+<p class="form-footnote"><a th:href="@{/patient/appointments/{id}(id=${appointment.id})}">Вернуться к записи</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ошибка запроса · Клиника</title>
+  <link rel="stylesheet" th:href="@{/css/auth-login.css}">
+</head>
+<body><main class="login-panel">
+  <h1>Не удалось выполнить запрос</h1>
+  <p>Код ошибки: <span th:text="${status}"></span></p>
+  <p>Проверьте адрес страницы или вернитесь ко входу. Если вы отправляли данные, сначала проверьте результат операции.</p>
+  <a th:href="@{/login}">Вернуться ко входу</a>
+</main></body>
+</html>

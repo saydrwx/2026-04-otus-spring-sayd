@@ -1,0 +1,10 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Подтверждение записи на приём')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel profile"><p class="eyebrow">Проверьте вашу запись</p><h1>Подтверждение записи на приём</h1>
+<dl><dt>Врач</dt><dd th:text="${doctor.firstName + ' ' + doctor.lastName}"></dd><dt>Больница</dt><dd th:text="${doctor.hospital.name}"></dd>
+<dt>Начало</dt><dd th:text="${@clinicTimes.dateTime(start)}"></dd><dt>Окончание</dt><dd th:text="${@clinicTimes.dateTime(end)}"></dd></dl>
+<p class="section-space">Время указано в UTC+03:00. Оно будет занято только после успешного подтверждения записи.</p>
+<form th:action="@{/patient/appointments/book}" method="post"><input type="hidden" name="doctorId" th:value="${doctor.id}"><input type="hidden" name="start" th:value="${start}"><button class="button" type="submit">Подтвердить запись</button></form>
+<p class="form-footnote"><a th:href="@{/doctors/{id}/availability(id=${doctor.id},date=${@clinicTimes.date(start)})}">Выбрать другое время</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

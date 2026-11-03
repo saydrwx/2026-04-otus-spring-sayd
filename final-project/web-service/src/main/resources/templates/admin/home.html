@@ -1,0 +1,7 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Администрирование')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Администрирование</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<section class="panel"><h2>Справочники</h2><p><a th:href="@{/admin/catalog/hospitals}">Больницы</a></p><p><a th:href="@{/admin/catalog/specialties}">Специальности</a></p><p><a th:href="@{/admin/catalog/doctors}">Врачи</a></p></section>
+<section class="panel"><h2>Записи и отчётность</h2><p><a th:href="@{/admin/appointments}">Все записи на приём и отмена</a></p><p><a th:href="@{/admin/statistics}">Статистика и выгрузка CSV</a></p><p>Здесь доступны только сведения для администрирования. Доступ к заключениям, документам и профилям определяется правами пациента или врача.</p></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

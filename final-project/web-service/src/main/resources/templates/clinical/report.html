@@ -1,0 +1,13 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Заключение по приёму')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Итоговое заключение</p><h1>Заключение по приёму</h1>
+<p>Отправлено <span th:text="${@clinicTimes.instant(report.submittedAt)}"></span> (UTC+03:00).</p>
+<p th:text="${labels.doctors[report.doctorId] ?: 'Сведения о враче недоступны'}"></p><p class="muted" th:text="${labels.hospitals[report.hospitalId] ?: 'Сведения о больнице недоступны'}"></p>
+<h2 class="section-space">Результаты осмотра</h2><p class="clinical-text" th:text="${report.findings}"></p>
+<h2>Диагноз</h2><p class="clinical-text" th:text="${report.diagnosis}"></p>
+<h2>Рекомендации</h2><p class="clinical-text" th:text="${report.recommendations}"></p>
+<p class="muted">Заключение окончательное; его нельзя изменить через это приложение.</p>
+<div class="profile-actions"><a th:href="${doctorView} ? @{/doctor/patients/{id}/reports(id=${report.patientId})} : @{/patient/reports}">История заключений</a>
+<a th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">Мои записи на приём</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

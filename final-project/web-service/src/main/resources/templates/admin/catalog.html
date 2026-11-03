@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Управление справочниками')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header><main class="container">
+<p class="eyebrow">Администратор</p><h1>Управление справочниками</h1><p><a th:href="@{/admin}">Администрирование</a></p>
+<h2 th:text="${@uiLabels.catalog(kind)}"></h2><a class="button" th:href="@{/admin/catalog/{kind}/new(kind=${kind})}">Добавить запись</a>
+<p class="notice" th:if="${#lists.isEmpty(rows)}">В справочнике пока нет записей.</p>
+<article class="panel" th:each="row : ${rows}"><h3><span th:text="${row.label}"></span> · #<span th:text="${row.id}"></span></h3>
+<a th:href="@{/admin/catalog/{kind}/{id}/edit(kind=${kind},id=${row.id})}">Редактировать</a> · <a th:href="@{/admin/catalog/{kind}/{id}/delete(kind=${kind},id=${row.id})}">Удалить…</a></article>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

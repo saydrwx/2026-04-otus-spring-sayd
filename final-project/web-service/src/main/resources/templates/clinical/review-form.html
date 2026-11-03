@@ -1,0 +1,15 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ваш отзыв')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Пациент · Отзыв о приёме</p><h1 th:text="${editing ? 'Редактирование отзыва' : 'Напишите отзыв'}"></h1>
+<p th:if="${message != null}" role="alert" class="notice error" th:text="${message}"></p>
+<form class="data-form" th:action="${editing} ? @{/patient/reviews/update} : @{/patient/reviews/create}" method="post" autocomplete="off" th:object="${reviewForm}">
+<input type="hidden" th:field="*{appointmentId}">
+<div th:if="${#fields.hasAnyErrors()}" role="alert" class="notice error"><p>Проверьте оценку, комментарий и выбранную запись на приём.</p><p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p></div>
+<label for="rating">Оценка</label><select id="rating" required th:field="*{rating}" th:errorclass="invalid" aria-describedby="rating-error"><option value="">Выберите оценку</option><option th:each="value : ${#numbers.sequence(1,5)}" th:value="${value}" th:text="${value + ' из 5'}"></option></select>
+<p id="rating-error" class="field-error" th:if="${#fields.hasErrors('rating')}">Выберите оценку от 1 до 5.</p>
+<label for="text">Комментарий <span class="muted">(необязательно)</span></label><textarea id="text" rows="6" maxlength="2000" th:field="*{text}" th:errorclass="invalid" aria-describedby="text-error"></textarea>
+<p id="text-error" class="field-error" th:if="${#fields.hasErrors('text')}">Не более 2 000 символов.</p>
+<button class="button" type="submit" th:text="${editing ? 'Сохранить отзыв' : 'Отправить отзыв'}"></button></form>
+<p class="form-footnote" th:if="${reviewForm.appointmentId != null}"><a th:href="@{/patient/appointments/{id}/review(id=${reviewForm.appointmentId})}">Проверить отзыв</a></p>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

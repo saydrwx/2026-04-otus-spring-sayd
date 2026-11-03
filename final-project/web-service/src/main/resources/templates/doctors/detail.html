@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Профиль врача')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><a class="back-link" th:href="@{/doctors}">← Все врачи</a>
+<article class="panel profile"><p class="eyebrow" th:text="${doctor.hospital.name}"></p>
+<h1 th:text="${doctor.firstName + ' ' + doctor.lastName}"></h1>
+<ul class="tags" aria-label="Специальности"><li th:each="specialty : ${doctor.specialties}" th:text="${specialty.name}"></li></ul>
+<dl><dt>Стаж</dt><dd><span th:text="${@uiLabels.experience(doctor.experienceYears)}"></span></dd>
+<dt>Образование</dt><dd th:text="${doctor.education ?: 'Не указано'}"></dd>
+<dt>Больница</dt><dd th:text="${doctor.hospital.name}"></dd>
+<dt>Адрес</dt><dd th:text="${doctor.hospital.address ?: 'Не указано'}"></dd>
+<dt>Электронная почта</dt><dd th:text="${doctor.email ?: 'Не указано'}"></dd></dl>
+<p class="section-space"><a class="button" th:href="@{/doctors/{id}/availability(id=${doctor.id})}">Посмотреть доступное время →</a></p>
+</article></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

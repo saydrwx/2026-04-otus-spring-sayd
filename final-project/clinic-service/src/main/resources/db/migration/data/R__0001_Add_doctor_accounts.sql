@@ -1,0 +1,4 @@
+INSERT INTO doctor_accounts (account_id, doctor_id)
+VALUES ('00000000-0000-0000-0000-000000000002', 1),
+       ('00000000-0000-0000-0000-000000000003', 2)
+ON CONFLICT (account_id) DO NOTHING;

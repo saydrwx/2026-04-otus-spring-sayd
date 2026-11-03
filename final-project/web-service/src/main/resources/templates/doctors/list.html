@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Найти врача')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container">
+<div class="page-heading"><p class="eyebrow">Наши специалисты</p><h1>Найти врача</h1><p>Ищите врача по больнице, специальности или обоим условиям.</p></div>
+<div class="directory-layout">
+<form class="panel filters" th:action="@{/doctors}" method="get" hx-get="/doctors" hx-target="#doctor-results" hx-swap="outerHTML" hx-push-url="true" hx-indicator="#search-progress" hx-disabled-elt="find button">
+<h2>Уточните поиск</h2><label for="hospital">Больница</label>
+<select id="hospital" name="hospitalId"><option value="">Все больницы</option>
+<option th:each="hospital : ${hospitals}" th:value="${hospital.id}" th:text="${hospital.name}" th:selected="${search.hospitalId == hospital.id}"></option></select>
+<fieldset><legend>Специальности</legend><p class="muted">Выберите подходящие специальности.</p>
+<label class="checkbox" th:each="specialty : ${specialties}"><input type="checkbox" name="specialtyIds" th:value="${specialty.id}" th:checked="${search.specialtyIds.contains(specialty.id)}"><span th:text="${specialty.name}"></span></label>
+<p th:if="${#lists.isEmpty(specialties)}" class="muted">Специальности не указаны.</p></fieldset>
+<button class="button" type="submit">Найти врачей</button><span id="search-progress" class="htmx-indicator muted" role="status">Идёт поиск…</span>
+<a class="reset-link" th:href="@{/doctors}">Сбросить фильтры</a>
+</form>
+<section id="doctor-results" th:fragment="results" aria-live="polite" aria-label="Результаты поиска врачей">
+  <div th:if="${message != null}" class="notice error" role="alert"><h2>Поиск недоступен</h2><p th:text="${message}"></p><p>Измените фильтры или повторите попытку.</p></div>
+  <th:block th:if="${message == null}">
+    <h2 class="results-heading">Найдено врачей: <span th:text="${#lists.size(doctors)}">0</span></h2>
+    <div th:if="${#lists.isEmpty(doctors)}" class="panel"><h3>Врачи по выбранным условиям не найдены</h3><p>Попробуйте другую больницу или выберите другие специальности.</p></div>
+    <article class="panel doctor-card" th:each="doctor : ${doctors}">
+      <p class="eyebrow" th:text="${doctor.hospital.name}"></p><h3><a th:href="@{/doctors/{id}(id=${doctor.id})}" th:text="${doctor.firstName + ' ' + doctor.lastName}"></a></h3>
+      <ul class="tags" aria-label="Специальности"><li th:each="specialty : ${doctor.specialties}" th:text="${specialty.name}"></li></ul>
+      <p class="muted">Стаж: <span th:text="${@uiLabels.experience(doctor.experienceYears)}"></span></p>
+      <a th:href="@{/doctors/{id}(id=${doctor.id})}">Открыть профиль →</a>
+    </article>
+  </th:block>
+</section></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

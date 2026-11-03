@@ -1,0 +1,7 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Учётная запись создана')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Следующий шаг</p><h1>Теперь вы можете войти</h1>
+<p>Если вы только что зарегистрировались, войдите с помощью электронной почты и пароля. После этого вы сможете заполнить профиль пациента.</p>
+<a class="button" th:href="@{/oauth2/authorization/hospital}">Перейти ко входу →</a>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

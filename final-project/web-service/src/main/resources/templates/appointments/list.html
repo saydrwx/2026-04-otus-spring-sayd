@@ -1,0 +1,20 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Мои записи на приём')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container"><p class="eyebrow" th:text="${doctorView ? 'Кабинет врача' : 'Кабинет пациента'}"></p><h1>Мои записи на приём</h1>
+<p>Время указано в UTC+03:00. Записи отсортированы от ранних к поздним, включая прошедшие приёмы.</p>
+<p th:unless="${doctorView}"><a class="button" th:href="@{/doctors}">Найти врача</a></p>
+<p class="muted">Всего записей: <span th:text="${appointments.totalElements}"></span></p>
+<div class="notice" th:if="${appointments.totalElements == 0}">У вас пока нет записей на приём.</div>
+<div class="notice" th:if="${appointments.totalElements > 0 and #lists.isEmpty(appointments.content)}">На этой странице записей нет. <a th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">Вернуться на первую страницу</a>.</div>
+<div class="appointment-grid"><article class="panel" th:each="appointment : ${appointments.content}">
+<p class="eyebrow" th:text="${@clinicTimes.status(appointment.status)}"></p><h2 th:text="${@clinicTimes.dateTime(appointment.start)}"></h2>
+<p th:unless="${doctorView}" th:text="${labels.doctors[appointment.doctorId] ?: 'Сведения о враче недоступны'}"></p>
+<p class="muted" th:text="${labels.hospitals[appointment.hospitalId] ?: 'Сведения о больнице недоступны'}"></p>
+<a th:href="${doctorView} ? @{/doctor/appointments/{id}(id=${appointment.id})} : @{/patient/appointments/{id}(id=${appointment.id})}">Открыть запись →</a>
+</article></div>
+<nav class="pagination" aria-label="Страницы записей на приём">
+<a th:if="${appointments.page > 0}" th:href="${doctorView} ? @{/doctor/appointments(page=${appointments.page - 1})} : @{/patient/appointments(page=${appointments.page - 1})}">← Назад</a>
+<span th:if="${appointments.totalPages > 0}">Страница <span th:text="${appointments.page + 1}"></span><span th:if="${appointments.page < appointments.totalPages}"> из <span th:text="${appointments.totalPages}"></span></span></span>
+<a th:if="${appointments.page + 1 < appointments.totalPages}" th:href="${doctorView} ? @{/doctor/appointments(page=${appointments.page + 1})} : @{/patient/appointments(page=${appointments.page + 1})}">Далее →</a>
+</nav></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Личный кабинет')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Личный кабинет</p>
+<h1 sec:authorize="hasRole('PATIENT')">Кабинет пациента</h1>
+<h1 sec:authorize="hasRole('DOCTOR')">Кабинет врача</h1>
+<h1 sec:authorize="hasRole('ADMIN')">Кабинет администратора</h1>
+<p>Вы вошли в систему.</p><p sec:authorize="hasRole('ADMIN')"><a class="button" th:href="@{/admin}">Открыть администрирование →</a></p><p sec:authorize="hasRole('DOCTOR')"><a class="button" th:href="@{/doctor/appointments}">Мои записи на приём →</a></p><a class="button" th:href="@{/doctors}">Посмотреть врачей →</a>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,0 +1,9 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Не удалось выполнить действие с записью')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Записи на приём</p><h1>Не удалось выполнить запрос</h1><p role="alert" th:text="${message}"></p>
+<div class="profile-actions"><a sec:authorize="hasAnyRole('PATIENT','DOCTOR')" th:href="${doctorView} ? @{/doctor/appointments} : @{/patient/appointments}">Проверить мои записи</a>
+<a th:if="${appointmentId != null}" th:href="@{/patient/appointments/{id}(id=${appointmentId})}">Проверить статус записи</a>
+<a th:if="${doctorId != null}" th:href="@{/doctors/{id}/availability(id=${doctorId},date=${selectedDate})}">Обновить доступное время</a>
+<a sec:authorize="hasRole('PATIENT')" th:href="@{/patient/profile}">Мой профиль</a><a th:href="@{/doctors}">Найти врача</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

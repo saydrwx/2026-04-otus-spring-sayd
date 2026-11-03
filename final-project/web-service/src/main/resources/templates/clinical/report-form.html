@@ -1,0 +1,19 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Итоговое заключение по приёму')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel"><p class="eyebrow">Врач · Завершение приёма</p><h1>Написать итоговое заключение</h1>
+<p th:if="${appointment != null}">Запись на приём: <span th:text="${@clinicTimes.dateTime(appointment.start)}"></span><br>Идентификатор пациента: <span class="reference" th:text="${appointment.patientId}"></span></p>
+<p class="notice">Отправка заключения завершит приём. После отправки его нельзя изменить или удалить через это приложение.</p>
+<p th:if="${message != null}" class="notice error" role="alert" th:text="${message}"></p>
+<form class="data-form clinical-form" th:action="@{/doctor/reports/submit}" method="post" autocomplete="off" th:object="${reportForm}">
+<input type="hidden" th:field="*{appointmentId}">
+<div th:if="${#fields.hasAnyErrors()}" class="notice error" role="alert"><p>Проверьте поля заключения и выбранную запись на приём.</p><p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p></div>
+<label for="findings">Результаты осмотра</label><textarea id="findings" rows="7" maxlength="10000" required th:field="*{findings}" th:errorclass="invalid" aria-describedby="findings-error"></textarea>
+<p id="findings-error" th:if="${#fields.hasErrors('findings')}" class="field-error">Укажите результаты осмотра: не более 10 000 символов.</p>
+<label for="diagnosis">Диагноз</label><textarea id="diagnosis" rows="5" maxlength="10000" required th:field="*{diagnosis}" th:errorclass="invalid" aria-describedby="diagnosis-error"></textarea>
+<p id="diagnosis-error" th:if="${#fields.hasErrors('diagnosis')}" class="field-error">Укажите диагноз: не более 10 000 символов.</p>
+<label for="recommendations">Рекомендации</label><textarea id="recommendations" rows="6" maxlength="10000" required th:field="*{recommendations}" th:errorclass="invalid" aria-describedby="recommendations-error"></textarea>
+<p id="recommendations-error" th:if="${#fields.hasErrors('recommendations')}" class="field-error">Укажите рекомендации: не более 10 000 символов.</p>
+<button class="button" type="submit">Отправить заключение и завершить приём</button></form>
+<div class="profile-actions" th:if="${reportForm.appointmentId != null}"><a th:href="@{/doctor/appointments/{id}(id=${reportForm.appointmentId})}">Проверить запись</a><a th:href="@{/doctor/appointments/{id}/report(id=${reportForm.appointmentId})}">Проверить заключение</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

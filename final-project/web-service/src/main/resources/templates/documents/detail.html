@@ -1,0 +1,11 @@
+<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Сведения о документе')}"></head>
+<body hx-history="false"><header th:replace="~{fragments/layout :: header}"></header>
+<main class="container narrow"><section class="panel profile"><p class="eyebrow">Сведения о документе</p><h1 class="document-name"><bdi th:text="${document.filename}"></bdi></h1>
+<dl><dt>Тип</dt><dd th:text="${@documentFiles.typeLabel(document.mediaType)}"></dd><dt>Размер</dt><dd th:text="${@documentFiles.sizeLabel(document.sizeBytes)}"></dd>
+<dt>Загружен</dt><dd><span th:text="${@clinicTimes.instant(document.uploadedAt)}"></span> (UTC+03:00)</dd></dl>
+<p class="section-space">Файлы скачиваются как вложения.</p>
+<div class="profile-actions"><a class="button" th:href="${doctorView} ? @{/doctor/documents/{id}/download(id=${document.id})} : @{/patient/documents/{id}/download(id=${document.id})}">Скачать файл</a>
+<a th:unless="${doctorView}" th:href="@{/patient/documents/{id}/delete(id=${document.id})}">Удалить документ</a>
+<a th:href="${doctorView} ? @{/doctor/patients/{id}/documents(id=${document.patientId})} : @{/patient/documents}">Список документов</a></div>
+</section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
